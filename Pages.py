@@ -1,4 +1,5 @@
 from tkinter import*
+from tkinter import messagebox
 
 FONT = ("arial", 18, "normal")
 
@@ -61,20 +62,21 @@ class HomePage(Frame):
 
     def open_task(self, task_name):
         subtasks = self.inside_task(task_name)
-        inside_task = Tk()
-        if subtasks is not None:
+        if subtasks == None:
+            dispInfo(info_title=subtasks, info="There are no subtasks")
+        else:
+            inside_task = Tk()
             for sub in subtasks:
                 column = 0
                 row = 0
                 name = sub["name"]
-                due_time = sub["due_time"]
+                due_time = sub["task_time"]
                 task_tab = TaskTab(parent=inside_task, task_name=name, due_time=due_time,
                                    clear_task=self.clear_stask)
                 task_tab.grid(column=column, row=row, columnspan=2, pady=2)
                 row += 1
-        else:
             print("wow")
-        inside_task.mainloop()
+            inside_task.mainloop()
 
     def exit_page(self):
         self.destroy()
@@ -217,8 +219,8 @@ class SubtaskCreation(Frame):
             "name": self.task_name.get(),
             "task_time": self.task_time.get(),
         }
-        self.destroy()
         self.save(name=self.p_task, subtask=subtask)
+        self.destroy()
 
 
 class TaskPlate(Frame):
@@ -229,4 +231,11 @@ class TaskPlate(Frame):
 
     def clear_tasks(self):
         self.destroy()
+
+class dispInfo:
+    def __init__(self, info_title, info):
+        messagebox.showinfo(info_title, info)
+
+
+    
     

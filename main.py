@@ -31,9 +31,10 @@ def comb_ourdata():
         time = now[1].split(".")[0]
         time = time[:5]
         for task in our_data:
+            task_time = our_data[task]["name"]
             task_time = our_data[task]["due_time"]
             if task_time == time:
-                print("It is time!!")
+                dispInfo(info_title="Time Up", info="f{name} task's time is due")
                 not_yet = False
             else:
                 print("It ain't timee")
@@ -139,4 +140,4 @@ if __name__ == "__main__":
     side_thread.start()
 
     main_thread.join()
-    main_thread.join()
+    side_thread.join()
