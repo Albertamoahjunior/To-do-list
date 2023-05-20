@@ -9,9 +9,14 @@
             }
         ]
     },
-    "Go to the market": {
-        "name": "Go to the market",
-        "due_time": "12:00",
-        "subtasks": []
+    "Go to market": {
+        "name": "Go to market",
+        "due_time": "12:30",
+        "subtasks": [
+            {
+                "name": "buy tomatoes",
+                "task_time": "12:45"
+            }
+        ]
     }
 }

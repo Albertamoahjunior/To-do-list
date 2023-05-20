@@ -41,10 +41,9 @@ class HomePage(Frame):
             for task in our_data:
                 name = our_data[task]["name"]
                 due_time = our_data[task]["due_time"]
-                task_tab = TaskTab(parent=self.task_platform, task_name=name, due_time=due_time,
-                                   command=lambda: self.open_task(task_name=name),
-                                   clear_task=self.clear_stask, add_subtask=self.add_subtask)
-                task_tab.grid(column=self.column, row=self.row, columnspan=2, pady=2)
+                TaskTab(parent=self.task_platform, task_name=name, due_time=due_time,
+                                   command= self.inside_task,
+                                   clear_task=self.clear_stask, add_subtask=self.add_subtask).grid(column=self.column, row=self.row, columnspan=2, pady=2)
                 self.row += 1
 
             clear_task = ClassyButton(parent=self.task_platform)
@@ -60,25 +59,6 @@ class HomePage(Frame):
         self.task_platform.clear_tasks()
         self.empty_tasks()
         self.clear_data()
-
-    def open_task(self, task_name):
-        subtasks = self.inside_task(task_name)
-        if subtasks == None:
-            dispInfo(info_title=subtasks, info="There are no subtasks")
-        else:
-            inside_task = Tk()
-            for sub in subtasks:
-                column = 0
-                row = 0
-                name = sub["name"]
-                due_time = sub["task_time"]
-                task_tab = TaskTab(parent=inside_task, task_name=name, due_time=due_time,
-                                   clear_task=self.clear_stask)
-                task_tab.grid(column=column, row=row, columnspan=2, pady=2)
-                row += 1
-            print("wow")
-            inside_task.geometry("100x100")
-            inside_task.mainloop()
 
     def exit_page(self):
         self.destroy()
@@ -164,11 +144,12 @@ class TaskTab(Frame):
         self.add_button = PhotoImage(file="./add_but.png")
         self.delete_button = PhotoImage(file="./delete_but.png")
         self.parent = parent
+        self.inside_task = command
         self.task_name = task_name
         self.clear_task = clear_task
         self.add_sub = add_subtask
         task_button = ClassyButton(parent=self)
-        task_button.config(text=f"{task_name} \t\t time:{due_time}", command=command, bg="#0a4691",fg="white", borderwidth=0, activebackground="#0a4691")
+        task_button.config(text=f"{task_name} \t\t time:{due_time}", command=self.open_task, bg="#0a4691",fg="white", borderwidth=0, activebackground="#0a4691")
         task_button.grid(column=0, row=0)
 
         delete_button = ClassyButton(parent=self)
@@ -190,6 +171,19 @@ class TaskTab(Frame):
         self.parent.parent.exit_page()
         new_subtask = SubtaskCreation(save=self.add_sub, p_task=self.task_name)
         new_subtask.pack(pady=25)
+
+    def open_task(self):
+        subtasks = self.inside_task(self.task_name)
+        if subtasks == None:
+            dispInfo(info_title=subtasks, info="There are no subtasks")
+        else:
+            subPage = ParentPage(title=self.task_name, size="200x150", colour="#023645")
+            for sub in subtasks:
+                name = sub["name"]
+                due_time = sub["task_time"]
+                Label(master=subPage, text=f"{name}  {due_time}", bg="#023645", fg="white", bd=1).pack()
+                
+            subPage.mainloop()
 
 
 class SubtaskCreation(Frame):
