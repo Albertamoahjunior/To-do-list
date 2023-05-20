@@ -1,7 +1,17 @@
 {
-    "fg": {
-        "name": "fg",
-        "due_time": "34",
+    "Go to school": {
+        "name": "Go to school",
+        "due_time": "10:00",
+        "subtasks": [
+            {
+                "name": "brush teeth",
+                "task_time": "9:45"
+            }
+        ]
+    },
+    "Go to the market": {
+        "name": "Go to the market",
+        "due_time": "12:00",
         "subtasks": []
     }
 }

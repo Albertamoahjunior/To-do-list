@@ -17,19 +17,20 @@ class HomePage(Frame):
     def __init__(self, parent, add_task, our_data, clear_data, clear_task=None,
                  open_task=None, add_subtask=None):
         super().__init__(master=parent)
-        self.config(bg="green")
+        self.config(bg="#023645")
         self.clear_data = clear_data
         self.clear_stask = clear_task
         self.inside_task = open_task
         self.add_subtask = add_subtask
+        self.add_button = PhotoImage(file="./add_but.png")
         self.column = 0
         self.row = 0
 
-        first_text = Label(master=self, text="Tasks list:", borderwidth=0, bg="green", fg="white", font=FONT)
+        first_text = Label(master=self, text="Tasks", borderwidth=0, bg="#023645", fg="white", font=FONT)
         first_text.grid(column=0, row=0, sticky="nw")
 
         home_exit = ClassyButton(parent=self)
-        home_exit.config(text="add", command=add_task)
+        home_exit.config(image=self.add_button, command=add_task, bg="#023645", activebackground="#023645", relief="flat")
         home_exit.grid(sticky="ne", column=1, row=0)
 
         if len(our_data) == 0:
@@ -51,7 +52,7 @@ class HomePage(Frame):
             clear_task.grid(sticky="se", column=1, row=self.row)
 
     def empty_tasks(self):
-        canvas = Canvas(master=self, bg="green", height=200, width=200)
+        canvas = Canvas(master=self, bg="#023645",fg="white", height=200, width=200)
         canvas.create_text(100, 100, text="No tasks")
         canvas.grid(column=0, row=1, columnspan=2)
 
@@ -76,6 +77,7 @@ class HomePage(Frame):
                 task_tab.grid(column=column, row=row, columnspan=2, pady=2)
                 row += 1
             print("wow")
+            inside_task.geometry("100x100")
             inside_task.mainloop()
 
     def exit_page(self):
@@ -88,20 +90,20 @@ class TaskCreationPage(Frame):
         self.subtask_row = 0
         self.subtasks = []
         self.save = save
-        self.config(height=100, width=60, bg="green", )
+        self.config(height=100, width=60, bg="#023645", )
         task_desc = Label(master=self, text="Task Name: ")
-        task_desc.config(borderwidth=0, bg="green", fg="white")
+        task_desc.config(borderwidth=0, bg="#023645", fg="white")
         task_desc.grid(column=0, row=0, columnspan=2, padx=5)
 
         task_label = Label(master=self, text="Task Name: ")
-        task_label.config(borderwidth=0, bg="green", fg="white")
+        task_label.config(borderwidth=0, bg="#023645", fg="white")
         task_label.grid(column=0, row=1, padx=5, pady=5)
         self.task_name = Entry(master=self)
         self.task_name.grid(column=1, row=1, padx=5, pady=5)
         self.task_name.focus()
 
         task_time_label = Label(master=self, text="Task due time: ")
-        task_time_label.config(borderwidth=0, bg="green", fg="white")
+        task_time_label.config(borderwidth=0, bg="#023645", fg="white")
         task_time_label.grid(column=0, row=2, padx=5, pady=5)
         self.task_time = Entry(master=self)
         self.task_time.grid(column=1, row=2, padx=5, pady=5)
@@ -115,14 +117,14 @@ class TaskCreationPage(Frame):
     def add_subtask(self):
         self.subtask_row = 4
         subtask_label = Label(master=self, text="Subtask Name: ")
-        subtask_label.config(borderwidth=0, bg="green", fg="white")
+        subtask_label.config(borderwidth=0, bg="#023645", fg="white")
         subtask_label.grid(column=0, row=self.subtask_row, padx=5, pady=5)
         subtask_name = Entry(master=self)
         subtask_name.grid(column=1, row=self.subtask_row, padx=5, pady=5)
         subtask_name.focus()
         self.subtask_row += 1
         subtask_time_label = Label(master=self, text="Subtask due time: ")
-        subtask_time_label.config(borderwidth=0, bg="green", fg="white")
+        subtask_time_label.config(borderwidth=0, bg="#023645", fg="white")
         subtask_time_label.grid(column=0, row=self.subtask_row, padx=5, pady=5)
         subtask_time = Entry(master=self)
         subtask_time.grid(column=1, row=self.subtask_row, padx=5, pady=5)
@@ -158,21 +160,23 @@ class ClassyButton(Button):
 
 class TaskTab(Frame):
     def __init__(self, parent, task_name, due_time, command=None, clear_task=None, add_subtask=None):
-        super().__init__(master=parent)
+        super().__init__(master=parent, bg="#0a4691")
+        self.add_button = PhotoImage(file="./add_but.png")
+        self.delete_button = PhotoImage(file="./delete_but.png")
         self.parent = parent
         self.task_name = task_name
         self.clear_task = clear_task
         self.add_sub = add_subtask
         task_button = ClassyButton(parent=self)
-        task_button.config(text=f"{task_name} \t\t time:{due_time}", command=command, bg="blue", borderwidth=0)
+        task_button.config(text=f"{task_name} \t\t time:{due_time}", command=command, bg="#0a4691",fg="white", borderwidth=0, activebackground="#0a4691")
         task_button.grid(column=0, row=0)
 
         delete_button = ClassyButton(parent=self)
-        delete_button.config(text="del", command=self.complete)
+        delete_button.config(image=self.delete_button, command=self.complete,  bg="#0a4691", fg="white", relief="flat", activebackground="#0a4691")
         delete_button.grid(column=1, row=0)
 
         add_button = ClassyButton(parent=self)
-        add_button.config(text="add", command=self.add_subtask)
+        add_button.config(image=self.add_button, command=self.add_subtask,  bg="#0a4691", fg="white", relief="flat", activebackground="#0a4691")
         add_button.grid(column=2, row=0)
 
     def complete(self):
@@ -193,20 +197,20 @@ class SubtaskCreation(Frame):
         super().__init__(master=parent)
         self.save = save
         self.p_task = p_task
-        self.config(height=100, width=60, bg="green", )
+        self.config(height=100, width=60, bg="#023645", )
         task_desc = Label(master=self, text="Task Name: ")
-        task_desc.config(borderwidth=0, bg="green", fg="white")
+        task_desc.config(borderwidth=0, bg="#023645", fg="white")
         task_desc.grid(column=0, row=0, columnspan=2, padx=5)
 
         task_label = Label(master=self, text="Task Name: ")
-        task_label.config(borderwidth=0, bg="green", fg="white")
+        task_label.config(borderwidth=0, bg="#023645", fg="white")
         task_label.grid(column=0, row=1, padx=5, pady=5)
         self.task_name = Entry(master=self)
         self.task_name.grid(column=1, row=1, padx=5, pady=5)
         self.task_name.focus()
 
         task_time_label = Label(master=self, text="Task due time: ")
-        task_time_label.config(borderwidth=0, bg="green", fg="white")
+        task_time_label.config(borderwidth=0, bg="#023645", fg="white")
         task_time_label.grid(column=0, row=2, padx=5, pady=5)
         self.task_time = Entry(master=self)
         self.task_time.grid(column=1, row=2, padx=5, pady=5)
@@ -227,7 +231,7 @@ class TaskPlate(Frame):
     def __init__(self, parent):
         super().__init__(master=parent)
         self.parent = parent
-        self.config(height=100, width=20, bg="green")
+        self.config(height=100, width=30, bg="#023645")
 
     def clear_tasks(self):
         self.destroy()

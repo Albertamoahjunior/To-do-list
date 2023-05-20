@@ -123,7 +123,7 @@ def main_page():
         task_page = TaskCreationPage(parent=platform, save=lambda: save_tasks(task_obj=task_page))
         task_page.pack(pady=25)
 
-    platform = ParentPage(title="Mine page", size="400x400", colour="red")
+    platform = ParentPage(title="To do list", size="400x400", colour="#023645")
 
     homepage = HomePage(parent=platform, add_task=create_task, our_data=our_data, clear_data=clear_all_tasks,
                         clear_task=delete_task, add_subtask=add_subtask, open_task=inside_task)
@@ -134,10 +134,10 @@ def main_page():
 
 if __name__ == "__main__":
     main_thread = Thread(target=main_page)
-    side_thread = Thread(target=comb_ourdata)
+    #side_thread = Thread(target=comb_ourdata)
 
     main_thread.start()
-    side_thread.start()
+    #side_thread.start()
 
     main_thread.join()
-    side_thread.join()
+    #side_thread.join()
