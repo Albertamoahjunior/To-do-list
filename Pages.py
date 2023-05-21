@@ -23,6 +23,7 @@ class HomePage(Frame):
         self.inside_task = open_task
         self.add_subtask = add_subtask
         self.add_button = PhotoImage(file="./add_but.png")
+
         self.column = 0
         self.row = 0
 
@@ -38,17 +39,23 @@ class HomePage(Frame):
         else:
             self.task_platform = TaskPlate(parent=self)
             self.task_platform.grid(column=0, row=1, columnspan=2)
+            self.sbar = Scrollbar(self.task_platform, bg="green")
+            self.sbar.grid(sticky="ne", column=1, row=0)
+
+            tasksForm = Listbox(self.task_platform, height=300)
+            tasksForm.grid(column=0, row=0)
+            
             for task in our_data:
                 name = our_data[task]["name"]
                 due_time = our_data[task]["due_time"]
-                TaskTab(parent=self.task_platform, task_name=name, due_time=due_time,
+                TaskTab(parent=tasksForm, task_name=name, due_time=due_time,
                                    command= self.inside_task,
                                    clear_task=self.clear_stask, add_subtask=self.add_subtask).grid(column=self.column, row=self.row, columnspan=2, pady=2)
                 self.row += 1
 
             clear_task = ClassyButton(parent=self.task_platform)
             clear_task.config(text="clear tasks", command=self.clear_task)
-            clear_task.grid(sticky="se", column=1, row=self.row)
+            clear_task.grid(sticky="se", column=0, row=1)
 
     def empty_tasks(self):
         canvas = Canvas(master=self, bg="#023645",fg="white", height=200, width=200)
@@ -226,6 +233,8 @@ class TaskPlate(Frame):
         super().__init__(master=parent)
         self.parent = parent
         self.config(height=100, width=30, bg="#023645")
+
+        
 
     def clear_tasks(self):
         self.destroy()
