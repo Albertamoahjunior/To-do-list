@@ -129,15 +129,15 @@ def main_page():
                         clear_task=delete_task, add_subtask=add_subtask, open_task=inside_task)
     homepage.pack(pady=25)
 
-    platform.mainloop()
+    platform.mainloop() 
 
 
 if __name__ == "__main__":
     main_thread = Thread(target=main_page)
-    #side_thread = Thread(target=comb_ourdata)
+    side_thread = Thread(target=comb_ourdata)
 
     main_thread.start()
-    #side_thread.start()
+    side_thread.start()
 
     main_thread.join()
-    #side_thread.join()
+    side_thread.join()

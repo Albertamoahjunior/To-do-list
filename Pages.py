@@ -12,12 +12,24 @@ class ParentPage(Tk):
         self.config(bg=colour)
         self.resizable(False, False)
 
+class PackageBox(Listbox):
+    def __init__(self, parent, package=None):
+        self.sbar = Scrollbar(parent, bg="green")
+        super().__init__(master=parent, yscrollcommand=self.sbar.set)
+        self.parent = parent
+        self.sbar.grid(sticky="ne", column=1, row=0)
+        self.config(bg="#023645", borderwidth=0, background="#023645")
+
+
+    def scrollset(self,package=None):
+        self.sbar.config(command=self.yview)
+        
 
 class HomePage(Frame):
     def __init__(self, parent, add_task, our_data, clear_data, clear_task=None,
                  open_task=None, add_subtask=None):
         super().__init__(master=parent)
-        self.config(bg="#023645")
+        self.config(bg="#023645", borderwidth=0, background="#023645")
         self.clear_data = clear_data
         self.clear_stask = clear_task
         self.inside_task = open_task
@@ -38,12 +50,13 @@ class HomePage(Frame):
             self.empty_tasks()
         else:
             self.task_platform = TaskPlate(parent=self)
+            self.task_platform.config(bg="#023645", borderwidth=0, background="#023645")
             self.task_platform.grid(column=0, row=1, columnspan=2)
-            self.sbar = Scrollbar(self.task_platform, bg="green")
-            self.sbar.grid(sticky="ne", column=1, row=0)
 
-            tasksForm = Listbox(self.task_platform, height=300)
+            tasksForm = PackageBox(parent=self.task_platform)
             tasksForm.grid(column=0, row=0)
+
+            tasksForm.scrollset()
             
             for task in our_data:
                 name = our_data[task]["name"]
@@ -106,29 +119,34 @@ class TaskCreationPage(Frame):
         subtask_label = Label(master=self, text="Subtask Name: ")
         subtask_label.config(borderwidth=0, bg="#023645", fg="white")
         subtask_label.grid(column=0, row=self.subtask_row, padx=5, pady=5)
-        subtask_name = Entry(master=self)
-        subtask_name.grid(column=1, row=self.subtask_row, padx=5, pady=5)
-        subtask_name.focus()
+        self.subtask_name = Entry(master=self)
+        self.subtask_name.grid(column=1, row=self.subtask_row, padx=5, pady=5)
+        self.subtask_name.focus()
         self.subtask_row += 1
         subtask_time_label = Label(master=self, text="Subtask due time: ")
         subtask_time_label.config(borderwidth=0, bg="#023645", fg="white")
         subtask_time_label.grid(column=0, row=self.subtask_row, padx=5, pady=5)
-        subtask_time = Entry(master=self)
-        subtask_time.grid(column=1, row=self.subtask_row, padx=5, pady=5)
+        self.subtask_time = Entry(master=self)
+        self.subtask_time.grid(column=1, row=self.subtask_row, padx=5, pady=5)
         self.subtask_row += 1
 
         def add_another_subtask():
             subtask = {
-                "name": subtask_name.get(),
-                "time": subtask_time.get(),
+                "name": self.subtask_name.get(),
+                "time": self.subtask_time.get(),
             }
             self.subtasks.append(subtask)
-            subtask_name.delete(0, END)
-            subtask_time.delete(0, END)
+            self.subtask_name.delete(0, END)
+            self.subtask_time.delete(0, END)
         self.save_task_button.grid(column=0, row=self.subtask_row, pady=10)
         self.add_subtask_button.config(command=add_another_subtask)
 
     def save_task(self):
+        subtask = {
+                "name": self.subtask_name.get(),
+                "task_time": self.subtask_time.get(),
+            }
+        self.subtasks.append(subtask)
         task = {
             "task": self.task_name.get(),
             "time": self.task_time.get(),
@@ -168,11 +186,11 @@ class TaskTab(Frame):
         add_button.grid(column=2, row=0)
 
     def complete(self):
-        self.parent.parent.row -= 1
+        self.parent.parent.parent.row -= 1
         self.clear_task(name=self.task_name)
         self.destroy()
-        if self.parent.parent.row < 1:
-            self.parent.parent.empty_tasks()
+        if self.parent.parent.paremt.row < 1:
+            self.parent.parent.parent.empty_tasks()
 
     def add_subtask(self):
         self.parent.parent.exit_page()
