@@ -31,9 +31,10 @@ def comb_ourdata():
         time = now[1].split(".")[0]
         time = time[:5]
         for task in our_data:
+            task_time = our_data[task]["name"]
             task_time = our_data[task]["due_time"]
             if task_time == time:
-                print("It is time!!")
+                dispInfo(info_title="Time Up", info="f{name} task's time is due")
                 not_yet = False
             else:
                 print("It ain't timee")
@@ -121,14 +122,17 @@ def main_page():
             homepage.exit_page()
         task_page = TaskCreationPage(parent=platform, save=lambda: save_tasks(task_obj=task_page))
         task_page.pack(pady=25)
-
-    platform = ParentPage(title="Mine page", size="400x400", colour="red")
+    
+    platform = ParentPage(title="To do list", size="400x400", colour="#023645")
+    main_icon = PhotoImage(file="./main_icon.png")
+    platform.setIcon(main_icon)
 
     homepage = HomePage(parent=platform, add_task=create_task, our_data=our_data, clear_data=clear_all_tasks,
                         clear_task=delete_task, add_subtask=add_subtask, open_task=inside_task)
-    homepage.pack(pady=25)
+    homepage.pack(side="left", anchor="ne",padx=30, pady= 20, fill=BOTH)
+    homepage.after(60)
 
-    platform.mainloop()
+    platform.mainloop() 
 
 
 if __name__ == "__main__":
@@ -139,4 +143,4 @@ if __name__ == "__main__":
     side_thread.start()
 
     main_thread.join()
-    main_thread.join()
+    side_thread.join()
