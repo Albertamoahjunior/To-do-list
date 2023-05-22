@@ -11,24 +11,27 @@ class ParentPage(Tk):
         self.geometry(size)
         self.config(bg=colour)
         self.resizable(False, False)
+    
+    def setIcon(self, icon):
+        self.iconphoto(False, icon)
+
+    def setScroll(self):
+        scrollc = Scrollbar(self)
+        scrollc.pack(side="right", anchor="nw", fill="y")
+        return scrollc
 
 class PackageBox(Listbox):
-    def __init__(self, parent, package=None):
-        self.sbar = Scrollbar(parent, bg="green")
-        super().__init__(master=parent, yscrollcommand=self.sbar.set)
+    def __init__(self, parent, scroll):
+        super().__init__(master=parent, yscrollcommand=scroll)
         self.parent = parent
-        self.sbar.grid(sticky="ne", column=1, row=0)
         self.config(bg="#023645", borderwidth=0, background="#023645")
-
-
-    def scrollset(self,package=None):
-        self.sbar.config(command=self.yview)
         
 
 class HomePage(Frame):
     def __init__(self, parent, add_task, our_data, clear_data, clear_task=None,
                  open_task=None, add_subtask=None):
         super().__init__(master=parent)
+        self.parent = parent
         self.config(bg="#023645", borderwidth=0, background="#023645")
         self.clear_data = clear_data
         self.clear_stask = clear_task
@@ -49,14 +52,14 @@ class HomePage(Frame):
         if len(our_data) == 0:
             self.empty_tasks()
         else:
+            scrollc = self.parent.setScroll()
             self.task_platform = TaskPlate(parent=self)
             self.task_platform.config(bg="#023645", borderwidth=0, background="#023645")
             self.task_platform.grid(column=0, row=1, columnspan=2)
 
-            tasksForm = PackageBox(parent=self.task_platform)
+            tasksForm = PackageBox(parent=self.task_platform, scroll=scrollc.set)
+            scrollc.config(command=tasksForm.yview)
             tasksForm.grid(column=0, row=0)
-
-            tasksForm.scrollset()
             
             for task in our_data:
                 name = our_data[task]["name"]

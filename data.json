@@ -1,1 +1,7 @@
-{}
+{
+    "Go to School": {
+        "name": "Go to School",
+        "due_time": "12:00",
+        "subtasks": []
+    }
+}
