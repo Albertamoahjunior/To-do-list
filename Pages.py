@@ -71,7 +71,7 @@ class HomePage(Frame):
             clear_task.grid(sticky="se", column=0, row=1)
 
     def empty_tasks(self):
-        canvas = Canvas(master=self, bg="#023645",fg="white", height=200, width=200)
+        canvas = Canvas(master=self, bg="#023645", height=200, width=200)
         canvas.create_text(100, 100, text="No tasks")
         canvas.grid(column=0, row=1, columnspan=2)
 
@@ -87,6 +87,7 @@ class HomePage(Frame):
 class TaskCreationPage(Frame):
     def __init__(self, parent, save):
         super().__init__(master=parent)
+        self.subtask = False
         self.subtask_row = 0
         self.subtasks = []
         self.save = save
@@ -115,6 +116,7 @@ class TaskCreationPage(Frame):
         self.save_task_button.grid(column=0, row=3, pady=10)
 
     def add_subtask(self):
+        self.subtask = True
         self.subtask_row = 4
         subtask_label = Label(master=self, text="Subtask Name: ")
         subtask_label.config(borderwidth=0, bg="#023645", fg="white")
@@ -142,12 +144,17 @@ class TaskCreationPage(Frame):
         self.add_subtask_button.config(command=add_another_subtask)
 
     def save_task(self):
-        if len(self.subtask_name.get()) >= 1:
+        if (self.subtask):
             subtask = {
                     "name": self.subtask_name.get(),
                     "task_time": self.subtask_time.get(),
                 }
             self.subtasks.append(subtask)
+            task = {
+            "task": self.task_name.get(),
+            "time": self.task_time.get(),
+            "subtasks": self.subtasks,
+        }
         else:
             task = {
                 "task": self.task_name.get(),
@@ -195,7 +202,7 @@ class TaskTab(Frame):
             self.parent.parent.parent.empty_tasks()
 
     def add_subtask(self):
-        self.parent.parent.exit_page()
+        self.parent.parent.parent.exit_page()
         new_subtask = SubtaskCreation(save=self.add_sub, p_task=self.task_name)
         new_subtask.pack(pady=25)
 

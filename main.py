@@ -128,6 +128,7 @@ def main_page():
     homepage = HomePage(parent=platform, add_task=create_task, our_data=our_data, clear_data=clear_all_tasks,
                         clear_task=delete_task, add_subtask=add_subtask, open_task=inside_task)
     homepage.pack(pady=25)
+    homepage.after(60)
 
     platform.mainloop() 
 
