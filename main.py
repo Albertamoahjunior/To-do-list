@@ -134,10 +134,10 @@ def main_page():
 
 if __name__ == "__main__":
     main_thread = Thread(target=main_page)
-    side_thread = Thread(target=comb_ourdata)
+    #side_thread = Thread(target=comb_ourdata)
 
     main_thread.start()
-    side_thread.start()
+    #side_thread.start()
 
     main_thread.join()
-    side_thread.join()
+    #side_thread.join()

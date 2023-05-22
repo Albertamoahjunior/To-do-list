@@ -77,8 +77,8 @@ class HomePage(Frame):
 
     def clear_task(self):
         self.task_platform.clear_tasks()
-        self.empty_tasks()
         self.clear_data()
+        self.empty_tasks()
 
     def exit_page(self):
         self.destroy()
@@ -142,16 +142,18 @@ class TaskCreationPage(Frame):
         self.add_subtask_button.config(command=add_another_subtask)
 
     def save_task(self):
-        subtask = {
-                "name": self.subtask_name.get(),
-                "task_time": self.subtask_time.get(),
+        if len(self.subtask_name.get()) >= 1:
+            subtask = {
+                    "name": self.subtask_name.get(),
+                    "task_time": self.subtask_time.get(),
+                }
+            self.subtasks.append(subtask)
+        else:
+            task = {
+                "task": self.task_name.get(),
+                "time": self.task_time.get(),
+                "subtasks": self.subtasks,
             }
-        self.subtasks.append(subtask)
-        task = {
-            "task": self.task_name.get(),
-            "time": self.task_time.get(),
-            "subtasks": self.subtasks,
-        }
         return task
 
     def exit_page(self):
